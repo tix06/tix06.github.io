@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<meta name="description" content="evenementDOM" />
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>evenementDOM</title>
+</head>
+<body>
+ <span id="clickme">Cliquez-moi !</span>
+ 
+ 
+<script id="jsbin-javascript">
+var clickme = document.getElementById('clickme');
+  
+    clickme.addEventListener('click', function(e) {
+        e.target.innerHTML = 'Vous avez cliqué !';
+}, false);
+clickme.addEventListener('mouseover', function(e) {
+        e.target.innerHTML = 'Vous avez passé la souris dessus !';
+    }, false);
+clickme.addEventListener('mouseout', function(e) {
+        e.target.innerHTML = 'Cliquez moi encore !';
+    }, false);
+</script>
+ 
+ 
+</body>
+</html>
