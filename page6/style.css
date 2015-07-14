@@ -1,0 +1,33 @@
+label
+{
+	display: block; /* La balise devient de type block. */
+	width: 150px; /* fixe la largeur du champs étiquette*/
+	float: left; /* évite le retour ligne du champs input après label - qui est aligné en block */
+}
+
+
+ 
+table {
+    /* width="100%" 
+    border="1" 
+    cellspacing="1" 
+    cellpadding="0" */
+    border-width:1px; 
+ 	border-style:solid; 
+ 	border-color:black;
+ 	width:50%;
+    
+}
+
+ table tr td{
+    
+    border-width:1px; 
+ 	border-style:solid; 
+ 	border-color:black;
+ }
+ 
+
+ table tr th:first-child{
+    border-right : none;
+    border-left : none;
+} 
