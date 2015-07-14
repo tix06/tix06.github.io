@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<meta name="description" content="drag and drop 2 cercles" />
+<html>
+<head>
+<title>TitreDocument</title>
+</head>
+<style>
+pre { 
+border-left:3px double blue;
+color:red;
+padding-left:10px;
+}
+canvas {
+	border:1px solid black;
+	-moz-box-shadow:3px 3px 2px #ccc;
+	-webkit-box-shadow:3px 3px 2px #ccc;
+	box-shadow:3px 3px 2px #ccc;
+	margin:5px;
+	
+}
+.code {
+	font-weight: bold;
+font-family: Courier, "Courier New", monospace;
+font-size: 14px;
+color: #811;
+}
+#showall {
+	text-align:center;
+	padding:2px;
+	margin:5px;
+}
+#source {
+	display:none;
+}
+
+
+
+
+	
+</style>
+<script>
+	var canvas,ctx,mouseX=9999,mouseY=9999,distX,distY;
+	var cercles = new Array (4); 
+for (var i=0; i<cercles.length; i++){
+	cercles[i] = new circle(60*i+50,100,7*i+5);//declaration des instances de la classe cercle
+       
+	}
+   
+	var cursor_grab ="url(data:application/cur;base64,AAACAAEAICACAAcABQAwAQAAFgAAACgAAAAgAAAAQAAAAAEAAQAAAAAAAAEAAAAAAAAAAAAAAgAAAAAAAAAAAAAA%2F%2F%2F%2FAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD8AAAA%2FAAAAfwAAAP%2BAAAH%2FgAAB%2F8AAA%2F%2FAAAd%2FwAAGf%2BAAAH9gAADbYAAA2yAAAZsAAAGbAAAAGAAAAAAAAA%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FgH%2F%2F%2F4B%2F%2F%2F8Af%2F%2F%2BAD%2F%2F%2FAA%2F%2F%2FwAH%2F%2F4AB%2F%2F8AAf%2F%2FAAD%2F%2F5AA%2F%2F%2FgAP%2F%2F4AD%2F%2F8AF%2F%2F%2FAB%2F%2F%2F5A%2F%2F%2F%2F5%2F%2F%2F8%3D), move";
+	var cursor_drag ="url(data:application/cur;base64,AAACAAEAICACAAcABQAwAQAAFgAAACgAAAAgAAAAQAAAAAEAAQAAAAAAAAEAAAAAAAAAAAAAAgAAAAAAAAAAAAAA%2F%2F%2F%2FAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD8AAAA%2FAAAAfwAAAP%2BAAAH%2FgAAB%2F8AAAH%2FAAAB%2FwAAA%2F0AAANsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FgH%2F%2F%2F4B%2F%2F%2F8Af%2F%2F%2BAD%2F%2F%2FAA%2F%2F%2FwAH%2F%2F%2BAB%2F%2F%2FwAf%2F%2F4AH%2F%2F%2BAD%2F%2F%2FyT%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8%3D), move";
+	
+	function init(){
+		
+		canvas = document.getElementById('dnd');
+		ctx = canvas.getContext('2d');
+		
+      
+      
+		canvas.addEventListener('mousemove',updateCanvas,false);
+		canvas.addEventListener('mousedown',startDrag,false);
+		canvas.addEventListener('mouseup',stopDrag,false);
+		// to prevent the I-bar cursor from appearing while dragging : 
+		canvas.addEventListener('selectstart',function(e){e.preventDefault();},false);	
+		canvas.style.MozUserSelect = "none";
+			
+			
+		drawCanvas();	
+		
+	}
+	
+function circle(Cx,Cy,rayon){ //classe cercle
+
+            this.x = Cx;
+            this.y = Cy;
+            this.r = rayon;
+            this.mouse =  false;
+			this.drag = false;
+// definition des methodes 
+            this.draw = dessine;
+		}
+function dessine(){
+ctx.beginPath();
+ctx.arc(this.x,this.y,this.r,0,Math.PI*2,false);
+ctx.fill();
+}
+
+
+
+
+
+	function findOffset(obj) { 
+		var curX = 0,curY = 0;
+		if (obj.offsetParent) {  // pour renvoyer les valeurs de position du canvas/ page
+			do {
+				curX += obj.offsetLeft; // Every time we find a new object, we add its offsetTop
+				curY += obj.offsetTop;
+			} while (obj == obj.offsetParent);
+		return {x:curX,y:curY};
+        /* The loop continues until the object currently being investigated
+        does not have an offsetParent any more. Finally, when the while loop
+        has quit, we return an array with the calculated coordinates to
+        whichever script asked for it.*/
+		}
+	}
+	
+	function updateCanvas(e){
+		
+		var pos = findOffset(canvas);
+		
+		mouseX = e.pageX - pos.x;
+		mouseY = e.pageY - pos.y;
+		// mettre boucle for sur liste objets
+        
+        var i = hasfocus(cercles); 
+        
+        
+		  if(cercles[i].mouse && !cercles[i].drag){
+		  	  canvas.style.cursor = cursor_grab;
+              info1.innerHTML = 'grab';
+		  } else if(cercles[i].drag) {
+			  canvas.style.cursor = cursor_drag;
+            info1.innerHTML = 'drag';
+		  } else {
+			  canvas.style.cursor = 'auto';
+            info1.innerHTML = 'auto';
+		   }
+      
+		  if(cercles[i].drag){
+			  cercles[i].x = mouseX - distX;
+			  cercles[i].y = mouseY - distY;
+		  }
+        
+		drawCanvas();
+	}
+	
+    function hasfocus(cercles){ // lequel des cercles a le focus??
+      var j = 0; //valeur par defaut
+      for (var i=0; i<cercles.length; i++){
+        if (cercles[i].mouse === true){
+          j = i;
+         }
+      }
+      return j;
+    } 
+
+	function startDrag(){ 
+      var i = hasfocus(cercles); 
+      if(cercles[i].mouse === true){
+			cercles[i].drag = true;
+			distX = mouseX - cercles[i].x; // fixe position objet - souris
+			distY = mouseY - cercles[i].y;
+    
+			ctx.save();
+     
+			ctx.shadowOffsetX = 2;
+			ctx.shadowOffsetY = 2;
+			ctx.shadowColor="rgba(0,0,0,.3)";
+			ctx.shadowBlur = 5;
+			drawCanvas();
+		}
+	}
+	
+	function stopDrag(){
+	  var i = hasfocus(cercles); 	
+      if(cercles[i].drag === true){
+			cercles[i].drag = false;
+        }
+			ctx.restore();
+			drawCanvas();	
+	}
+	
+	function drawCanvas(){
+		ctx.clearRect(0,0,canvas.width,canvas.height);
+		for (var i=0; i<cercles.length; i++){
+        cercles[i].draw();
+        if (ctx.isPointInPath(mouseX,mouseY)){
+         cercles[i].mouse = true;
+         //info2.innerHTML = 'focus sur'+i;
+         }
+      else
+         {
+         cercles[i].mouse = false;
+         }   
+        }
+      
+	
+	}
+
+</script>
+</head>
+<body onload='init()'>
+<table width="760" border="0" cellpadding="15" cellspacing="0" align="center">
+        
+
+
+
+<canvas id="dnd" width="400px" height="300px"></canvas>
+<div id="info1"></div>
+  <div id="info2"></div>
+
+</table>
+</body>
+</html>
+
