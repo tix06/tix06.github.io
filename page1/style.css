@@ -1,0 +1,92 @@
+nav, div.diplome {
+/* mise en forme "général" des divs de classe diplome
+  Bord arrondi
+ Espacement entre le cadre et le texte
+ Justification du texte (alignement)
+ Encadrement
+ Ombre*/
+border-radius: 0.5em;
+padding: 0.5em;
+text-align: center;
+border: blue thin solid; box-shadow: 1px 1px 2px black;
+/* dimension du menu */
+/* un peu plus qu'une ligne */ 
+height: 1.3em;
+width: 13em;
+}
+ 
+nav > ul, div.diplome > div.menudiplomecontainer { 
+/* pour etre caché : Concerne les divs de class="menudiplomecontainer"
+*/
+height: 0;/* Une hauteur de 0 */
+ 
+overflow: hidden; /*Ce qui dépasse est caché */
+opacity: 0; /* pour tout cacher */
+ 
+/* Transparence totale 
+Uniquement pour effet*/
+/* pour l'animation du menu "descendant" */ 
+transition: all 1s ease-in-out; 
+-webkit-transition: all 1s ease-in-out;  
+/* Animation calculée par le navigateur en cas de changement 
+Porte sur toutes les propriétés « éligibles » 
+À faire pour chaque navigateur */
+/* ne sera visible que lorsque le menu sera affiché */ 
+border-radius: 0 0 0.2em 0,2em;
+padding: 0.2em;
+background-color: rgb(200,200,255);
+border: blue thin solid; 
+border-top-style: none; 
+box-shadow: 1px 1px 2px black;
+ 
+/* Mise en forme pour un menu visible */
+/* coins du bas arrondis */
+/* Couleur de fond */
+/* Encadrement */
+/* Sauf en haut (pour ne pas faire de séparation avec la partie toujours visible du menu */
+}
+  
+nav:hover , div.diplome:hover {
+  /*déroule le menu lorsque survolé*/
+background-color: rgb(200,200,255);
+}
+nav:hover > ul , div.diplome:hover > div.menudiplomecontainer {
+/* pour rendre le menu visible */
+opacity: 1;
+height: 5em;
+/* si auto, ne sait pas faire la transition */
+}
+  
+ 
+nav > ul , div.diplome > div.menudiplomecontainer {
+  /* pouvoir interagir avec le menu "déroulé" */
+/* pour être au dessus de ce qu'il y a en dessous du menu */
+position: relative; z-index: 1;
+}
+ 
+/* mise en forme des liens */
+nav a , div.menudiplomecontainer a {
+/* uniquement pour les liens du menu */ text-align: center;
+display: block;
+border: rgba(0,0,0,0) thin solid;
+/* pour ne pas que cela bouge en :hover avec l'ajout d'un cadre */
+}
+nav:hover > ul a:hover , div.diplome:hover > div.menudiplomecontainer a:hover
+{
+/* un mise en valeur par un fond blanc semi-transparent et par un cadre bleu */ border: blue thin solid;
+background: rgba(255,255,255,0.5);
+}
+ 
+/* 2 menus déroulants côte à côte */ 
+nav , div.diplome {
+/* pour placer plusieurs menus l'un à côté de l'autre */
+float: left; 
+margin: 0.1em; 
+  /*les menus sont flottants sur la gauche et marge 0.1em entre les 2*/
+}
+nav + *:not(nav) , div.diplome + *:not(.diplome) {
+/* *:not(.diplome) ou ici pourrait être "p" */
+/* pour mettre fin au menu */ 
+  clear: both;
+  /*Le premier élément qui n’est pas un menu et qui suit un menu est remis à la ligne*/
+}
