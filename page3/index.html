@@ -1,0 +1,68 @@
+!DOCTYPE html>
+<meta name="description" content="rotation et mousover" />
+<html>
+<body>
+ 
+<canvas id="myCanvas" widht="200" height="200">Your browser does not support the canvas tag.</canvas>
+ 
+ 
+<script id="jsbin-javascript">
+// initialisation de windows.requestAnimFrame
+window.requestAnimFrame = (function(){
+    return window.requestAnimationFrame       || // La forme standardisée
+           window.webkitRequestAnimationFrame || // Pour Chrome et Safari
+           window.mozRequestAnimationFrame    || // Pour Firefox
+           window.oRequestAnimationFrame      || // Pour Opera
+           window.msRequestAnimationFrame     || // Pour Internet Explorer
+           function(callback){                   // Pour les élèves du dernier rang
+               window.setTimeout(callback, 1000 / 60);
+           };
+})();
+
+// Script d'animation 
+var canvas=document.getElementById('myCanvas');
+var context =canvas.getContext('2d'); 
+
+
+
+    
+    
+traceRosace(0, true);
+  
+
+
+function traceRosace(angle, ev){
+context.save();  // sauvegarde de la position initiale du repère
+context.clearRect(0, 0, 200, 200);  // efface le canvas
+context.translate(75,75); // définit le centre de rotation
+
+context.fillStyle = "teal"; // choix couleur 1er rectangle
+context.rotate((Math.PI / 180) * (45+angle)); // rotation axes de 45°+angle  
+context.fillRect(0, 0, 50, 50);
+context.fillStyle = "orange"; // choix couleur 2e rectangle
+context.rotate(Math.PI / 2);        
+context.fillRect(0, 0, 50, 50);          
+context.fillStyle = "teal"; // couleur 3e rectangle
+context.rotate(Math.PI / 2);        
+context.fillRect(0, 0, 50, 50);      
+context.fillStyle = "orange"; // couleur 4e rectangle
+context.rotate(Math.PI / 2);        
+context.fillRect(0, 0, 50, 50);
+context.restore(); // restauration position initiale du repère
+if (ev) {angle = angle+2;}
+window.requestAnimFrame(function() { traceRosace(angle, ev); });
+}
+
+canvas.addEventListener('mouseover', function() {
+traceRosace(0, false);
+}, false);
+
+canvas.addEventListener('mouseout', function() {
+traceRosace(0, true);
+}, false);
+</script>
+ 
+ 
+ 
+</body>
+</html>
