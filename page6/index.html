@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<meta name="description" content="gestion tableaux" />
+<html>
+  <head>
+	<meta charset="UTF-8">
+	<title>TitreDocument</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+
+  <body>
+	<form name="form1">
+	<p>Prenom : <input type="text" name="first" value="prenom 1" id="first" />  Nom : <input type="text" name="last" value="nom 1" id = "last" />
+	<input type="button" value = "Submit" id= 'Submit' onClick = 'send()'/>
+	</p>
+	</form>
+	<table>
+	<tr><th>Eleve 1</th><td id=lin1.col1>prenom 1</td> 
+	<td id= lin1.col2>nom 1</td></tr>
+	<tr><th>Eleve 2</th><td id=lin2.col1>lin2.col1</td> 
+	<td id= lin2.col2>lin2.col2</td></tr>
+	<tr><th>Eleve 3</th><td id=lin3.col1>lin3.col1</td> 
+	<td id= lin3.col2>lin3.col2</td></tr>
+	<tr><th><input type="button" value = "Reset" name= 'Reset' id= 'Reset' onClick = 'Reset'/></th>
+	</table>
+
+
+  <script>
+
+  var tabeleves = new Array ();
+	
+
+  function eleves(first, last) {
+	this.prenom = first;
+	this.nom = last;
+	}
+
+  function send() {
+	var prenom = document.getElementById("first").value;
+	var nom = document.getElementById("last").value;
+	var eleve = new eleves(prenom, nom);
+	tabeleves.push(eleve);
+	affiche(tabeleves);
+	}
+	
+  function affiche(tableau) {
+	for (var i=0; i<tableau.length; i++){
+	document.getElementById("lin"+(i+1)+".col1").innerHTML = tableau[i].prenom;
+	document.getElementById("lin"+(i+1)+".col2").innerHTML = tableau[i].nom;
+	}
+	}
+ 
+	
+  </script>
+  </body>
+  </html>
